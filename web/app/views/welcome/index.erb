@@ -1,0 +1,307 @@
+<%# binding.pry %>
+
+<div class="hold-transition skin-red">
+    <div class="wrapper">
+
+        <%= render partial: "layouts/header"%>
+
+        <%= render partial: "layouts/sidebar"%>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Sweet Search.
+                    <small></small>
+                </h1>
+                <!-- <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">Dashboard</li>
+                    </ol>  -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <!-- Info boxes -->
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <form action="#" method="get" id="main_search_form" class="sidebar-form" style="display: block !important; margin-right: 0px; margin-left: 0px">
+                            <div class="input-group">
+                                <input type="text" name="q" id="search-btn-val" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="searchContent">
+                    <div class="row">
+                        <!-- Who? -->
+                        <div class="col-md-4">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Who?</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <div class="btn-group">
+                                            <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-body user_tweet_content">
+                                    <ul class="products-list product-list-in-box">
+                                    </ul>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div><!-- /.col -->
+
+                        <!--  What? -->
+                        <div class="col-md-4">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">What?</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <div class="btn-group">
+                                            <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-body topic_tweet_content">
+                                    <ul class="products-list product-list-in-box">
+                                    </ul>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div><!-- /.col -->
+
+                        <!-- Where? -->
+                        <div class="col-md-4">
+                            <div class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Where?</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-body no-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="pad">
+                                                <!-- Map will be created here -->
+                                                <div id="world-map-markers" style="height: 315px;"></div>
+                                            </div>
+                                        </div><!-- /.col -->
+                                        <div class="col-md-3 col-sm-4" style="display:none">
+                                            <div class="pad box-pane-right bg-green" style="min-height: 280px">
+                                                <div class="description-block margin-bottom">
+                                                    <div class="sparkbar pad" data-color="#fff">90,70,90,70,75,80,70</div>
+                                                    <h5 class="description-header">8390</h5>
+                                                    <span class="description-text">Visits</span>
+                                                </div><!-- /.description-block -->
+                                                <div class="description-block margin-bottom">
+                                                    <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
+                                                    <h5 class="description-header">30%</h5>
+                                                    <span class="description-text">Referrals</span>
+                                                </div><!-- /.description-block -->
+                                                <div class="description-block">
+                                                    <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
+                                                    <h5 class="description-header">70%</h5>
+                                                    <span class="description-text">Organic</span>
+                                                </div><!-- /.description-block -->
+                                            </div>
+                                        </div><!-- /.col -->
+                                    </div><!-- /.row -->
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div><!-- /.row -->
+                    </div>
+
+                    <!-- Main row -->
+
+                    <div class="row" >
+                        <div class="col-md-12">
+                            <!-- Info Boxes Style 2 -->
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default" >
+                                <div class="panel-heading" style="padding:0px;">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#popularity_collapse">
+                                            <div class="info-box bg-red" style="margin-bottom:0px;" >
+                                                <span class="info-box-icon"><i class="ion ion-social-twitter-outline"></i></span>
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text">Popularity</span>
+                                                    <span id="popularity_count" class="info-box-number"></span>
+                                                </div><!-- /.info-box-content -->
+                                            </div><!-- /.info-box -->
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="popularity_collapse" class="panel-collapse collapse in">
+                                    <div class="panel-body" style="margin-bottom:0px; display:none">
+                                        <div class="box-body">
+                                            <div class="row" >
+                                                <div class="col-md-8">
+                                                    <div class="chart-responsive">
+                                                        <canvas id="pieChart" height="150"></canvas>
+                                                    </div><!-- ./chart-responsive -->
+                                                </div><!-- /.col -->
+                                                <div class="col-md-4">
+                                                    <ul class="chart-legend clearfix">
+                                                        <li><i class="fa fa-circle-o text-red"></i> Negative</li>
+                                                        <li><i class="fa fa-circle-o text-green"></i> Positive </li>
+                                                        <li><i class="fa fa-circle-o text-yellow"></i> Neutral</li>
+                                                    </ul>
+                                                </div><!-- /.col -->
+                                            </div><!-- /.row -->
+                                        </div><!-- /.box-body -->
+                                        <div class="box-footer no-padding">
+                                            <ul class="nav nav-pills nav-stacked">
+                                                <li><a href="#">Positive <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 45%</span></a></li>
+                                                <li><a href="#">Negative <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 48%</span></a></li>
+                                                <li><a href="#">Neutral <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 7%</span></a></li>
+                                            </ul>
+                                        </div><!-- /.footer -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" >
+                                <div class="panel-heading" style="padding:0px;">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#hashtags_collapse">
+                                            <div class="info-box bg-yellow" style="margin-bottom:0px;">
+                                                <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text">Hashtags</span>
+                                                    <span id="hashtag_count" class="info-box-number"></span>
+                                                </div><!-- /.info-box-content -->
+                                            </div><!-- /.info-box -->
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="hashtags_collapse" class="panel-collapse collapse in">
+                                    <div class="panel-body" style="margin-bottom:0px;display:none">
+                                        <div class="box-body">
+                                            <div class="row">
+                                            </div><!-- /.row -->
+                                        </div><!-- /.box-body -->
+                                        <div class="box-footer no-padding">
+                                        </div><!-- /.footer -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" style="display:none">
+                                <div class="panel-heading" style="padding:0px;">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#mentions_collapse">
+                                            <div class="info-box bg-green" style="margin-bottom:0px;">
+                                                <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text">Mentions</span>
+                                                    <span class="info-box-number">92,050</span>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" style="width: 20%"></div>
+                                                    </div>
+                                                    <span class="progress-description">
+                                                        20% Increase in 30 Days
+                                                    </span>
+                                                </div><!-- /.info-box-content -->
+                                            </div><!-- /.info-box -->
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="mentions_collapse" class="panel-collapse collapse in">
+                                    <div class="panel-body" style="margin-bottom:0px;">
+                                        <div class="box-body">
+                                            <div class="row">
+                                            </div><!-- /.row -->
+                                        </div><!-- /.box-body -->
+                                        <div class="box-footer no-padding">
+                                        </div><!-- /.footer -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" style="display:none">
+                                <div class="panel-heading" style="padding:0px;">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#direct_messages_collapse">
+                                            <div class="info-box bg-aqua" style="margin-bottom:0px;">
+                                                <span class="info-box-icon"><i class="ion-ios-chatbubble-outline"></i></span>
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text">Direct Messages</span>
+                                                    <span class="info-box-number">163,921</span>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" style="width: 40%"></div>
+                                                    </div>
+                                                    <span class="progress-description">
+                                                        40% Increase in 30 Days
+                                                    </span>
+                                                </div><!-- /.info-box-content -->
+                                            </div><!-- /.info-box -->
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="direct_messages_collapse" class="panel-collapse collapse in">
+                                    <div class="panel-body" style="margin-bottom:0px;">
+                                        <div class="box-body">
+                                            <div class="row">
+                                            </div><!-- /.row -->
+                                        </div><!-- /.box-body -->
+                                        <div class="box-footer no-padding">
+                                        </div><!-- /.footer -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- /.content -->
+        </div><!-- /.content-wrapper -->
+
+        <%= render partial: "layouts/footer"%>
+
+    </div><!-- ./wrapper -->
+
+    <div id="userModalHolder">
+        <%= render partial: "shared/user_modal"%>
+    </div>
+    <div id="topicsModalHolder">
+        <%= render partial: "shared/topics_modal" %>
+    </div>
+    <div id="mapModalHolder">
+        <%= render partial: "shared/map_modal" %>
+    </div>
+
+</div>
+
+<div class="ui loading fluid multiple search selection dropdown">
+
+    <%(@results["response"]["docs"] rescue []).each do |result|%>
+        <li><%=result["text"].join%></li>
+    <%end%>
+</div>

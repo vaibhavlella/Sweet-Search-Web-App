@@ -1,0 +1,188 @@
+#!/usr/bin/env bash
+
+PROJ_DIR=$(cd "$(dirname "$0")"; pwd -P)/..
+
+PROJ_BIN_DIR=$PROJ_DIR/bin
+PROJ_SCRIPTS_DIR=$PROJ_DIR/scripts
+SOLR_BIN=$PROJ_BIN_DIR/solr
+TREC_BIN=$PROJ_BIN_DIR/trec_eval
+PYTHON_BIN=$PROJ_BIN_DIR/python
+
+PROJ_DATA_DIR=$PROJ_DIR/data
+PROJ_CONFIG_DIR=$PROJ_DIR/config
+PROJ_TMP_DIR=$PROJ_DIR/tmp
+
+DATA_FILE=$PROJ_DATA_DIR/normalized/tweets.json
+
+SOLR_URL=http://localhost:8983/solr
+SOLR_CORE_PREFIX=projc
+SOLR_BASE_DIR=$PROJ_DIR/symlinks/solrdir/$SOLR_CORE_PREFIX
+SOLR_CORE_DIR=$SOLR_BASE_DIR/solr
+
+display_help () {
+    echo "Please enter a command:"
+    echo "    run"
+    echo "    createsolrcore(core_suffix)"
+    echo "    startsolr"
+    echo "    stopsolr"
+    echo "    index(core_suffix)"
+    echo "    purge(core_suffix)"
+    echo "    reset(core_suffix)"
+    echo "    reindex(core_suffix)"
+    echo "    query(core_suffix, query_string)"
+    echo "    topterms(core_suffix, field_name)"
+}
+
+setup() {
+    echo ""
+    echo "Setting up the system..."
+    stopsolr
+    rm -rf $SOLR_BASE_DIR
+    mkdir $SOLR_BASE_DIR
+    mkdir $SOLR_CORE_DIR
+    cp $PROJ_CONFIG_DIR/solr.xml $SOLR_CORE_DIR/solr.xml
+    startsolr
+    for core in "$@"; do
+        createsolrcore $core
+        cp $PROJ_CONFIG_DIR/$core/schema.xml "$SOLR_CORE_DIR"/"$core"/conf/
+        cp $PROJ_CONFIG_DIR/$core/solrconfig.xml "$SOLR_CORE_DIR"/"$core"/conf/
+        cp $PROJ_CONFIG_DIR/$core/stopwords_en.txt "$SOLR_CORE_DIR"/"$core"/conf/lang/
+        cp $PROJ_CONFIG_DIR/$core/stopwords_de.txt "$SOLR_CORE_DIR"/"$core"/conf/lang/
+        cp $PROJ_CONFIG_DIR/$core/stopwords_ru.txt "$SOLR_CORE_DIR"/"$core"/conf/lang/
+    done
+    startsolr
+    echo "Setting up the system...done"
+}
+
+createsolrcore() {
+    solr_core="$1"
+    echo ""
+    echo "Creating solr core..."
+    $SOLR_BIN create -c $solr_core
+    echo "Creating solr core...done"
+}
+
+startsolr () {
+    echo ""
+    echo "Starting/Restarting solr..."
+    $SOLR_BIN stop -all
+    $SOLR_BIN start -s $SOLR_CORE_DIR
+    echo "Starting/Restarting solr...done"
+}
+
+stopsolr () {
+    echo ""
+    echo "Stoping solr..."
+    $SOLR_BIN stop -all
+    echo "Stoping solr...done"
+}
+
+purge () {
+    solr_core="$1"
+    echo ""
+    echo "Deleting tweets from solr instance..."
+    curl "$SOLR_URL/$solr_core/update?stream.body=<delete><query>*:*</query></delete>&commit=true"
+    echo "Deleting tweets from solr instance...done"
+}
+
+reset () {
+    solr_core="$1"
+    echo ""
+    echo "Reloading solr core..."
+    curl "$SOLR_URL/admin/cores?action=RELOAD&core=$solr_core"
+    echo "Reloading solr core...done"
+}
+
+index () {
+    solr_core="$1"
+    echo ""
+    echo "Indexing tweeets..."
+    curl "$SOLR_URL/$solr_core/update/json?commit=true" --data-binary @$DATA_FILE -H "Content-type:application/json"
+    echo "Indexing tweeets...done"
+}
+
+reindex () {
+    purge $1
+    reset $1
+    index $1
+}
+
+runsinglecore() {
+    startsolr
+    purge $1
+    reset $1
+    index $1
+}
+
+run() {
+    for core in "$@"; do
+        runsinglecore $core
+    done
+}
+
+updateconfig() {
+    solr_config_dir="$SOLR_CORE_DIR"/"$1"/conf
+    proj_config_dir="$PROJ_CONFIG_DIR"/"$1"
+    rm -rf $solr_config_dir/schema.xml
+    rm -rf $solr_config_dir/solrconfig.xml
+    cp $proj_config_dir/schema.xml $solr_config_dir/schema.xml
+    cp $proj_config_dir/solrconfig.xml $solr_config_dir/solrconfig.xml
+    cp $proj_config_dir/stopwords_en.txt $solr_config_dir/lang/stopwords_en.txt
+    cp $proj_config_dir/stopwords_de.txt $solr_config_dir/lang/stopwords_de.txt
+    cp $proj_config_dir/stopwords_ru.txt $solr_config_dir/lang/stopwords_ru.txt
+}
+
+query () {
+    solr_core="$1"
+    curl "$SOLR_URL/$solr_core/select?q=$2&fl=id,text_en,text_de,text_ru,score&wt=json&indent=true&rows=9999&debugQuery=on"
+}
+
+topterms () {
+    solr_core="$1"
+    curl "$SOLR_URL/$solr_core/terms?wt=json&indent=true&debugQuery=true&terms.fl=$2&terms.sort=count"
+}
+
+collect () {
+    "$PYTHON_BIN" "$PROJ_SCRIPTS_DIR/pyscrape/scraper.py" "$PROJ_DATA_DIR/downloaded"
+    "$PYTHON_BIN" "$PROJ_SCRIPTS_DIR/pyscrape/normalizer.py" "$PROJ_DATA_DIR/downloaded" "$PROJ_DATA_DIR/normalized" "tweets.json"
+}
+
+if [ x"$1" == "xrun" ]; then
+    shift
+    run $@
+elif [ x"$1" == "xsetup" ]; then
+    shift
+    setup $@
+elif [ x"$1" == "xcollect" ]; then
+    collect
+elif [ x"$1" == "xcreatesolrcore" ]; then
+    createsolrcore $2
+elif [ x"$1" == "xstartsolr" ]; then
+    startsolr
+elif [ x"$1" == "xstopsolr" ]; then
+    stopsolr
+elif [ x"$1" == "xindex" ]; then
+    index $2
+elif [ x"$1" == "xpurge" ]; then
+    purge $2
+elif [ x"$1" == "xreset" ]; then
+    reset $2
+elif [ x"$1" == "xreindex" ]; then
+    reindex $2
+elif [ x"$1" == "xupdateconfig" ]; then
+    updateconfig $2
+elif [ x"$1" == "xquery" ]; then
+    if [ x"$2" != "x" ]; then
+        query $2 $3
+    else
+        display_help
+    fi
+elif [ x"$1" == "xtopterms" ]; then
+    if [ x"$2" != "x" ]; then
+        topterms $2 $3
+    else
+        display_help
+    fi
+else
+    display_help
+fi

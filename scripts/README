@@ -1,0 +1,8 @@
+PROJECT SETUP:
+--------------
+* Create a directory named "bin"
+    - Create a soft symlink "bin/solr" linking to solr binary
+    - Create a soft symlink "bin/trec_eval" linking to trec_eval binary
+    - Create a soft symlink "bin/python" linking to python binary
+* Create a directory named "symlinks"
+    - Create a soft symlink "symlinks/solrdir" linking to the solr directory where the solr cores are stored
